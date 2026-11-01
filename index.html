@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OneFit Connect Before vs After Dashboard | Team 4</title>
+<meta name="description" content="Before vs after dashboard for OneFit Connect: baseline 2,700-session dataset compared with the projected improved dataset.">
+<style>
+:root{--navy:#0B2E6B;--blue:#1F5FBF;--bright:#2F80ED;--sky:#56B4F5;--pale:#DCEBFA;--mist:#F1F7FE;--rule:#C9DBF0;--ink:#1B2A44;--muted:#52658A;--before:#9FB3D1;--after:#1F5FBF;--good:#0b7a6b;--bad:#b3261e}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:#fff;line-height:1.55;font-size:15px}
+a{color:inherit;text-decoration:none}
+.app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}
+aside{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--mist);border-right:1px solid var(--rule);padding:22px 18px;display:flex;flex-direction:column}
+.org{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+aside h1{font-family:Georgia,"Times New Roman",serif;font-size:22px;line-height:1.2;color:var(--navy);margin:12px 0 4px}
+aside .sub{font-size:13px;color:var(--blue);font-weight:700;margin-bottom:16px}
+.nav{display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--rule);padding-top:12px}
+.nav a{display:flex;gap:10px;padding:9px 10px;border-radius:4px;font-size:14px;border-left:3px solid transparent;cursor:pointer}
+.nav a b{min-width:18px;color:var(--blue)}
+.nav a:hover{background:var(--pale)}
+.nav a.on{background:#fff;border-left-color:var(--navy);font-weight:700;color:var(--navy);box-shadow:0 1px 2px rgba(11,46,107,.12)}
+.team{margin-top:auto;padding-top:16px;border-top:1px solid var(--rule);font-size:13px}
+.team h4{margin:0 0 6px;font-size:12px;letter-spacing:.6px;text-transform:uppercase;color:var(--navy)}
+.team div{padding:2px 0}
+.content{min-width:0}
+.top{padding:22px 34px 0;border-bottom:1px solid var(--rule)}
+.top .t1{font-family:Georgia,serif;font-size:26px;color:var(--navy);margin:0}
+.top .t2{color:var(--muted);margin:2px 0 14px;font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--rule);border-bottom:0}
+.kpi{padding:10px 12px;border-right:1px solid var(--rule);background:var(--mist);cursor:pointer}
+.kpi:last-child{border-right:0}.kpi:hover{background:var(--pale)}
+.kpi .v{font-family:Georgia,serif;font-size:22px;color:var(--navy);font-weight:700;line-height:1.15}
+.kpi .l{font-size:11px;color:var(--muted);line-height:1.3;margin-top:2px}
+.kpi .d{font-size:12px;font-weight:700;margin-top:3px}
+.good{color:var(--good)}.bad{color:var(--bad)}
+.view{display:none;padding:28px 34px 40px;max-width:1080px}.view.on{display:block}
+.crumb{font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:var(--blue);font-weight:700}
+.view h2{font-family:Georgia,serif;font-size:30px;line-height:1.2;color:var(--navy);margin:6px 0 10px}
+.lead{font-size:16px;max-width:820px;margin:0 0 18px}.lead b{color:var(--navy)}
+.figs{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.fig{border:1px solid var(--rule);background:#fff}
+.fig .cap{background:var(--mist);border-bottom:1px solid var(--rule);padding:8px 12px;font-size:13px;font-weight:700;color:var(--navy)}
+.fig .cap span{font-weight:400;color:var(--muted)}
+.fig .body{padding:10px 12px 8px}.fig .note{font-size:12px;color:var(--muted);padding:0 12px 10px}
+.box{position:relative;height:300px}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--muted);margin:0 0 10px}
+.legend s{display:inline-block;width:10px;height:10px;margin-right:6px;text-decoration:none}
+.finding{margin:20px 0 0;padding:14px 18px;border:1px solid var(--rule);border-left:5px solid var(--navy);background:var(--mist)}
+.finding b{color:var(--navy)}.finding small{display:block;color:var(--muted);margin-top:4px;font-size:13px}
+table.t{border-collapse:collapse;width:100%;margin:6px 0 0;font-size:14px}
+table.t th{background:var(--navy);color:#fff;text-align:left;padding:8px 10px}
+table.t td{padding:8px 10px;border-bottom:1px solid var(--rule)}
+table.t tr:nth-child(even) td{background:var(--mist)}
+.n{text-align:right}
+.pager{display:flex;justify-content:space-between;margin-top:26px;padding-top:14px;border-top:1px solid var(--rule)}
+.pager a{padding:9px 18px;border:1px solid var(--navy);color:var(--navy);font-weight:700;font-size:14px;cursor:pointer}
+.pager a:hover{background:var(--navy);color:#fff}.pager .gap{visibility:hidden}
+.warn{background:#fff7e0;border:1px solid #f0d58a;padding:10px 14px;font-size:13.5px;color:#5c4400;margin:0 0 18px;max-width:900px}
+.dl a{display:inline-block;margin:6px 8px 0 0;padding:8px 14px;border:1px solid var(--navy);color:var(--navy);font-weight:700;font-size:13px}
+.dl a:hover{background:var(--navy);color:#fff}
+.fine{font-size:12px;color:var(--muted);margin-top:24px;max-width:820px}
+#nochart{display:none;background:#fff3cd;color:#5c4400;padding:10px 24px;font-size:14px}
+@media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.kpi{border-bottom:1px solid var(--rule)}}
+@media(max-width:860px){.app{grid-template-columns:1fr}aside{position:static;height:auto}.figs{grid-template-columns:1fr}.view,.top{padding-left:18px;padding-right:18px}.team{display:none}}
+</style>
+</head>
+<body>
+<div id="nochart">The chart library did not load. Make sure the vendor folder was uploaded with this page.</div>
+<div class="app">
+<aside>
+  <div class="org">Saint Louis University · Information Systems</div>
+  <h1>OneFit Connect:<br>Before vs After</h1>
+  <div class="sub">Baseline vs projected improvement</div>
+  <nav class="nav" id="nav"></nav>
+  <div class="team"><h4>Team 4</h4><div>Sree Kavya</div><div>Siddhartha</div><div>Surya Sundar</div><div>Krishna Vamsi</div></div>
+</aside>
+<div class="content">
+  <div class="top"><h1 class="t1">Did one shared platform change the picture?</h1>
+    <p class="t2">2,700 class sessions, 3 locations, Jan to Jun 2026. Grey = before (baseline). Blue = after (projected with OneFit Connect).</p>
+    <div class="kpis" id="kpis"></div></div>
+  <div id="views"></div>
+</div>
+</div>
+<script src="vendor/chart.umd.js"></script>
+<script src="data/summary.js"></script>
+<script>
+(function(){
+'use strict';
+var D=window.DATA,B=D.before,A=D.after,LOCN={LOC01:'Location 1',LOC02:'Location 2',LOC03:'Location 3'};
+var LOCS=['LOC01','LOC02','LOC03'],LL=LOCS.map(function(l){return LOCN[l]}),CLS=['Spin','HIIT','Strength','Pilates','Yoga','Zumba'];
+var CB='#9FB3D1',CA='#1F5FBF',MONTHS=D.months;
+var KP=[
+ {k:'util',name:'Seat utilization',unit:'%',better:'up',def:'Attendance divided by class capacity',view:'ch1'},
+ {k:'margin',name:'Profit margin',unit:'%',better:'up',def:'Session profit divided by session revenue',view:'ch5'},
+ {k:'denied',name:'Cross-location requests turned away',unit:'',better:'down',def:'Requests denied because memberships were location-locked',view:'ch2'},
+ {k:'err',name:'Sessions with record errors',unit:'%',better:'down',def:'Share of sessions with a data error',view:'ch3'},
+ {k:'churn',name:'Churn-risk share of attendees',unit:'%',better:'down',def:'Churn-risk attendees divided by all attendees',view:'ch4'},
+ {k:'rating',name:'Average member rating',unit:'',better:'up',def:'Mean session rating, 5-point scale',view:'ch6'}];
+function fmt(k,v){return k==='denied'?v.toLocaleString('en-US'):(k==='rating'?v.toFixed(2):v.toFixed(1)+'%')}
+function delta(k,b,a,better){var d=a-b,good=(better==='up'?d>0:d<0),pct=k==='denied'?Math.round(d/b*100)+'%':(k==='rating'?(d>=0?'+':'')+d.toFixed(2):(d>=0?'+':'')+d.toFixed(1)+' pts');
+ if(k==='denied'&&d>0)pct='+'+pct;return '<span class="'+(good?'good':'bad')+'">'+(d>0?'▲ ':'▼ ')+pct+'</span>'}
+var VIEWS=[
+ {id:'ov',n:'Overview',t:'Overview',nav:'Overview'},
+ {id:'ch1',n:'1',t:'Fuller classes, same schedule',nav:'Seat utilization'},
+ {id:'ch2',n:'2',t:'Fewer members turned away',nav:'Cross-location access'},
+ {id:'ch3',n:'3',t:'Cleaner records',nav:'Data quality'},
+ {id:'ch4',n:'4',t:'Churn risk comes down',nav:'Churn risk'},
+ {id:'ch5',n:'5',t:'Profit follows attendance',nav:'Profitability'},
+ {id:'ch6',n:'6',t:'Ratings recover a little',nav:'Member rating'},
+ {id:'ch7',n:'7',t:'How the "after" data was built',nav:'Method and assumptions'}];
+var charts={},built={},FM={};
+var valuePlugin={id:'vals',afterDatasetsDraw:function(c){var ctx=c.ctx;if(c.config.type!=='bar')return;ctx.save();ctx.font='bold 11px Arial';ctx.fillStyle='#1B2A44';ctx.textAlign='center';
+ c.data.datasets.forEach(function(ds,i){var m=c.getDatasetMeta(i);m.data.forEach(function(el,j){var v=ds.data[j];var f=FM[c.canvas.id];ctx.fillText(f?f(v):v,el.x,el.y-4)})});ctx.restore()}};
+function mk(id,cfg){var el=document.getElementById(id);if(!el)return;if(charts[id])charts[id].destroy();FM[id]=cfg.options.fmt;delete cfg.options.fmt;cfg.plugins=(cfg.plugins||[]).concat([valuePlugin]);charts[id]=new Chart(el,cfg)}
+function barCfg(labels,b,a,f,o){o=o||{};return{type:'bar',data:{labels:labels,datasets:[{label:'Before',data:b,backgroundColor:CB,borderRadius:3},{label:'After (projected)',data:a,backgroundColor:CA,borderRadius:3}]},
+ options:{fmt:f,responsive:true,maintainAspectRatio:false,layout:{padding:{top:16}},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+f(c.parsed.y)}}}},
+ scales:{y:{beginAtZero:o.min===undefined,min:o.min,max:o.max,title:{display:!!o.yt,text:o.yt},grid:{color:'#e6eef9'}},x:{grid:{display:false}}}}}}
+function lineCfg(labels,b,a,f,o){o=o||{};return{type:'line',data:{labels:labels,datasets:[{label:'Before',data:b,borderColor:CB,backgroundColor:CB,tension:.3,pointRadius:4},{label:'After (projected)',data:a,borderColor:CA,backgroundColor:CA,tension:.3,pointRadius:4}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+f(c.parsed.y)}}}},scales:{y:{beginAtZero:o.min===undefined,min:o.min,title:{display:!!o.yt,text:o.yt},grid:{color:'#e6eef9'}},x:{grid:{display:false}}}}}}
+function fig(id,cap,sub,note){return '<div class="fig"><div class="cap">'+cap+' <span>'+(sub||'')+'</span></div><div class="body"><div class="box"><canvas id="'+id+'"></canvas></div></div>'+(note?'<div class="note">'+note+'</div>':'')+'</div>'}
+var LEG='<div class="legend"><span><s style="background:'+CB+'"></s>Before (baseline)</span><span><s style="background:'+CA+'"></s>After (projected)</span></div>';
+function pager(i){var p=VIEWS[i-1],n=VIEWS[i+1];return '<div class="pager">'+(p?'<a data-go="'+p.id+'">← '+p.nav+'</a>':'<a class="gap">.</a>')+(n?'<a data-go="'+n.id+'">'+n.nav+' →</a>':'<a class="gap">.</a>')+'</div>'}
+function g(o,l,k){return o.byLoc[l][k]}
+function arr(o,k){return LOCS.map(function(l){return g(o,l,k)})}
+function marr(o,k){return [1,2,3,4,5,6].map(function(m){return o.byMonth[m][k]})}
+function carr(o,k){return CLS.map(function(c){return o.byClass[c][k]})}
+var pct=function(v){return v.toFixed(1)+'%'};
+
+var HTML={};
+HTML.ov=function(){var rows=KP.map(function(x){var b=B.overall[x.k],a=A.overall[x.k];return '<tr><td><b>'+x.name+'</b><br><span style="color:#52658A;font-size:12px">'+x.def+'</span></td><td class="n">'+fmt(x.k,b)+'</td><td class="n"><b>'+fmt(x.k,a)+'</b></td><td class="n">'+delta(x.k,b,a,x.better)+'</td></tr>'}).join('');
+ return '<div class="crumb">Overview</div><h2>Six KPIs, before and after</h2><p class="lead">The baseline is the measured-by-rule dataset from our earlier dashboard. The <b>after</b> numbers show what the same 2,700 sessions would look like if OneFit Connect had been running: shared bookings, validation, reminders and early outreach.</p>'+
+ '<div class="warn"><b>Read this first:</b> the "after" data is a rule-based projection built from stated assumptions (see chapter 7), not a measured result. It shows expected direction and size of impact for planning and feedback.</div>'+
+ '<table class="t"><tr><th>KPI</th><th class="n">Before</th><th class="n">After (projected)</th><th class="n">Change</th></tr>'+rows+'</table>'+
+ '<div class="finding"><b>The story in one line:</b> the same demand, better handled. Attendance rises by '+(A.overall.attendance-B.overall.attendance).toLocaleString('en-US')+' visits, record errors drop from '+pct(B.overall.err)+' to '+pct(A.overall.err)+', and churn-risk share falls from '+pct(B.overall.churn)+' to '+pct(A.overall.churn)+'.<small>Profit margin includes the $'+D.assumptions.PLATFORM_COST_TOTAL.toLocaleString('en-US')+' platform cost over six months.</small></div>'+pager(0)};
+HTML.ch1=function(){var du=(A.overall.util-B.overall.util).toFixed(1);return '<div class="crumb">Chapter 1</div><h2>Fuller classes, same schedule</h2><p class="lead">Utilization rises from <b>'+pct(B.overall.util)+'</b> to <b>'+pct(A.overall.util)+'</b> because turned-away members become bookings and reminders recover no-shows. No new classes are added.</p>'+LEG+
+ '<div class="figs">'+fig('c1a','Utilization by location','% of seats filled by attendance','Biggest gains where cross-location demand and no-shows were highest.')+fig('c1b','Utilization by month','% of seats filled','The January surge and fade pattern stays; the gap between lines is the platform effect.')+'</div>'+
+ '<div class="finding"><b>+'+du+' points of utilization</b> across the chain, from '+B.overall.attendance.toLocaleString('en-US')+' to '+A.overall.attendance.toLocaleString('en-US')+' attended seats.<small>Source: sessions table, Attendance / Class_Capacity.</small></div>'+pager(1)};
+HTML.ch2=function(){return '<div class="crumb">Chapter 2</div><h2>Fewer members turned away</h2><p class="lead">Before, memberships were location-locked: <b>'+B.overall.denied.toLocaleString('en-US')+'</b> requests were turned away while seats sat empty. With one shared membership, <b>'+A.crossBooked.toLocaleString('en-US')+'</b> of them become bookings, limited by seats left.</p>'+LEG+
+ '<div class="figs">'+fig('c2a','Requests turned away by location','count',null)+fig('c2b','Turned away by month','count',null)+'</div>'+
+ '<div class="finding"><b>Turned-away requests fall '+Math.round((1-A.overall.denied/B.overall.denied)*100)+'%</b> ('+B.overall.denied.toLocaleString('en-US')+' to '+A.overall.denied.toLocaleString('en-US')+').<small>Assumption: '+Math.round(D.assumptions.A_XLOC_CONVERT*100)+'% of turned-away requests would book if allowed, and only when a seat is free.</small></div>'+pager(2)};
+HTML.ch3=function(){return '<div class="crumb">Chapter 3</div><h2>Cleaner records</h2><p class="lead">Each location used a different tool, so error rates differed sharply. Validation (no duplicate or double bookings) and one-tap check-in prevent most of them: sessions with errors drop from <b>'+pct(B.overall.err)+'</b> to <b>'+pct(A.overall.err)+'</b>.</p>'+LEG+
+ '<div class="figs">'+fig('c3a','Sessions with record errors by location','% of sessions',null)+fig('c3b','Error count by location','sessions',null)+'</div>'+
+ '<div class="finding"><b>'+B.overall.errors+' error sessions become '+A.overall.errors+'.</b> Location 3, which used a manual log, improves the most ('+pct(g(B,'LOC03','err'))+' to '+pct(g(A,'LOC03','err'))+').<small>Assumption: '+Math.round(D.assumptions.A_ERR_PREVENT*100)+'% of record errors are prevented; the rest still occur.</small></div>'+pager(3)};
+HTML.ch4=function(){return '<div class="crumb">Chapter 4</div><h2>Churn risk comes down</h2><p class="lead">The share of attendees showing churn-risk behavior falls from <b>'+pct(B.overall.churn)+'</b> to <b>'+pct(A.overall.churn)+'</b>. Fewer errors mean better experiences, and the churn engine lets staff reach out early.</p>'+LEG+
+ '<div class="figs">'+fig('c4a','Churn-risk share by month','% of attendees','Risk climbs after the January surge in both cases, but starts and ends lower after.')+fig('c4b','Churn-risk share by location','% of attendees',null)+'</div>'+
+ '<div class="finding"><b>'+(B.overall.churners-A.overall.churners).toLocaleString('en-US')+' fewer churn-risk attendee visits</b> over six months.<small>Assumption: early outreach cuts churn-risk attendees by '+Math.round(D.assumptions.A_OUTREACH_CUT*100)+'%, on top of the effect of fewer errors.</small></div>'+pager(4)};
+HTML.ch5=function(){return '<div class="crumb">Chapter 5</div><h2>Profit follows attendance</h2><p class="lead">Margin rises from <b>'+pct(B.overall.margin)+'</b> to <b>'+pct(A.overall.margin)+'</b>, even after paying for the platform. Revenue grows with attendance while fixed class costs stay the same.</p>'+LEG+
+ '<div class="figs">'+fig('c5a','Profit margin by class type','% of revenue',null)+fig('c5b','Total revenue and profit','USD','Revenue and profit, six months, all locations.')+'</div>'+
+ '<div class="finding"><b>Profit: $'+B.overall.profit.toLocaleString('en-US')+' to $'+A.overall.profit.toLocaleString('en-US')+'</b> (+$'+(A.overall.profit-B.overall.profit).toLocaleString('en-US')+').<small>After-costs include $'+D.assumptions.PLATFORM_COST_TOTAL.toLocaleString('en-US')+' for hosting, messaging and licences.</small></div>'+pager(5)};
+HTML.ch6=function(){return '<div class="crumb">Chapter 6</div><h2>Ratings recover a little</h2><p class="lead">Average rating moves from <b>'+B.overall.rating.toFixed(2)+'</b> to <b>'+A.overall.rating.toFixed(2)+'</b>. The gain is small by design: only sessions where an error was prevented regain the rating penalty the baseline applied.</p>'+LEG+
+ '<div class="figs">'+fig('c6a','Average rating by location','1 to 5 scale, axis starts at 4.0','The axis is zoomed to 4.0 to 5.0 so small differences are visible.')+fig('c6b','Average rating by class type','1 to 5 scale, axis starts at 4.0',null)+'</div>'+
+ '<div class="finding"><b>+'+(A.overall.rating-B.overall.rating).toFixed(2)+' rating points</b>, largest where errors were most common.<small>Honest note: a real rollout may do better or worse; this is the conservative modeled effect.</small></div>'+pager(6)};
+HTML.ch7=function(){var a=D.assumptions;return '<div class="crumb">Chapter 7</div><h2>How the "after" data was built</h2><p class="lead">We kept the baseline sessions (same dates, classes, locations, instructors) and applied five documented rules, in order. Nothing else changes.</p>'+
+ '<table class="t"><tr><th>#</th><th>Rule</th><th>Assumption</th><th class="n">Value</th></tr>'+
+ '<tr><td>1</td><td>Validation and one-tap check-in prevent record errors</td><td>Share of errors prevented</td><td class="n">'+Math.round(a.A_ERR_PREVENT*100)+'%</td></tr>'+
+ '<tr><td>2</td><td>One shared membership turns away fewer members</td><td>Turned-away requests that book (seat permitting)</td><td class="n">'+Math.round(a.A_XLOC_CONVERT*100)+'%</td></tr>'+
+ '<tr><td>3</td><td>Reminders reduce no-shows</td><td>Would-be no-shows recovered</td><td class="n">'+Math.round(a.A_REMINDER_RECOVER*100)+'%</td></tr>'+
+ '<tr><td>4</td><td>Fewer errors lift ratings</td><td>Rating penalty regained on sessions where an error was prevented</td><td class="n">+'+a.RATING_ERR_PENALTY+'</td></tr>'+
+ '<tr><td>5</td><td>Early outreach lowers churn risk</td><td>Reduction in churn-risk attendees</td><td class="n">'+Math.round(a.A_OUTREACH_CUT*100)+'%</td></tr>'+
+ '<tr><td>6</td><td>Platform cost is charged to profit</td><td>Six-month total, spread across sessions</td><td class="n">$'+a.PLATFORM_COST_TOTAL.toLocaleString('en-US')+'</td></tr></table>'+
+ '<div class="finding"><b>Limits:</b> this is a projection from stated assumptions, not observed behavior. Change any assumption in <code>generate_improved_data.py</code> and the whole dashboard data regenerates. The dataset passes the same checks as the baseline: 2,700 rows, no nulls, no duplicate IDs, bookings and attendance never exceed capacity.</div>'+
+ '<p class="dl"><a href="data/Fitness_Chain_Before_After_Dataset.xlsx">Download Excel (before, after, assumptions)</a><a href="data/fitness_chain_sessions_before.csv">Before CSV</a><a href="data/fitness_chain_sessions_after.csv">After CSV</a></p>'+pager(7)};
+
+var DRAW={
+ ch1:function(){mk('c1a',barCfg(LL,arr(B,'util'),arr(A,'util'),pct,{min:0,max:100}));mk('c1b',lineCfg(MONTHS,marr(B,'util'),marr(A,'util'),pct,{min:40}))},
+ ch2:function(){mk('c2a',barCfg(LL,arr(B,'denied'),arr(A,'denied'),function(v){return v.toLocaleString('en-US')}));mk('c2b',lineCfg(MONTHS,marr(B,'denied'),marr(A,'denied'),function(v){return v.toLocaleString('en-US')}))},
+ ch3:function(){mk('c3a',barCfg(LL,arr(B,'err'),arr(A,'err'),pct));mk('c3b',barCfg(LL,arr(B,'errors'),arr(A,'errors'),function(v){return v}))},
+ ch4:function(){mk('c4a',lineCfg(MONTHS,marr(B,'churn'),marr(A,'churn'),pct,{min:0}));mk('c4b',barCfg(LL,arr(B,'churn'),arr(A,'churn'),pct))},
+ ch5:function(){mk('c5a',barCfg(CLS,carr(B,'margin'),carr(A,'margin'),pct));mk('c5b',barCfg(['Revenue','Profit'],[B.overall.revenue,B.overall.profit],[A.overall.revenue,A.overall.profit],function(v){return '$'+Math.round(v/1000)+'k'}))},
+ ch6:function(){mk('c6a',barCfg(LL,arr(B,'rating'),arr(A,'rating'),function(v){return v.toFixed(2)},{min:4,max:5}));mk('c6b',barCfg(CLS,carr(B,'rating'),carr(A,'rating'),function(v){return v.toFixed(2)},{min:4,max:5}))}
+};
+function show(id){var i=VIEWS.map(function(v){return v.id}).indexOf(id);if(i<0){i=0;id='ov'}
+ Array.prototype.forEach.call(document.querySelectorAll('.view'),function(v){v.classList.toggle('on',v.id==='v-'+id)});
+ Array.prototype.forEach.call(document.querySelectorAll('#nav a'),function(a){a.classList.toggle('on',a.getAttribute('data-go')===id)});
+ if(!built[id]){document.getElementById('v-'+id).innerHTML=HTML[id]();built[id]=1}
+ if(DRAW[id]&&typeof Chart!=='undefined')DRAW[id]();
+ if(location.hash!=='#'+id)history.replaceState(null,'','#'+id);window.scrollTo(0,0)}
+function init(){
+ if(typeof Chart==='undefined')document.getElementById('nochart').style.display='block';
+ document.getElementById('nav').innerHTML=VIEWS.map(function(v){return '<a data-go="'+v.id+'"><b>'+(v.n.length===1?v.n:'•')+'</b>'+v.nav+'</a>'}).join('');
+ document.getElementById('views').innerHTML=VIEWS.map(function(v){return '<section class="view" id="v-'+v.id+'"></section>'}).join('');
+ document.getElementById('kpis').innerHTML=KP.map(function(x){var b=B.overall[x.k],a=A.overall[x.k];return '<div class="kpi" data-go="'+x.view+'"><div class="v">'+fmt(x.k,a)+'</div><div class="l">'+x.name+'</div><div class="d">'+delta(x.k,b,a,x.better)+' <span style="color:#52658A;font-weight:400">vs '+fmt(x.k,b)+'</span></div></div>'}).join('');
+ document.addEventListener('click',function(e){var t=e.target.closest('[data-go]');if(t){e.preventDefault();show(t.getAttribute('data-go'))}});
+ window.addEventListener('hashchange',function(){show(location.hash.slice(1))});
+ show(location.hash.slice(1)||'ov')}
+init();
+})();
+</script>
+</body>
+</html>
