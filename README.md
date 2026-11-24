@@ -15,9 +15,9 @@ Open `index.html` in a browser.
 
 ## Contents
 - `index.html`: the dashboard (overview + 6 chapters + method)
-- `vendor/chart.umd.js`: Chart.js (bundled so no internet is needed)
-- `data/`: before and after CSVs, one Excel file (before, after, assumptions), `summary.js` used by the page
-- `scripts/`: Python that built both datasets. `generate_improved_data.py` lists every assumption at the top.
+- `chart.umd.js`: Chart.js (bundled so no internet is needed)
+- before and after CSVs, one Excel file (before, after, assumptions), `summary.js` used by the page
+- Python that built both datasets. `generate_improved_data.py` lists every assumption at the top.
 
 ## Rebuild the data after changing an assumption
 ```
@@ -25,7 +25,7 @@ cd scripts
 pip install pandas numpy
 python3 generate_improved_data.py
 ```
-This writes new CSVs and `summary.json` in the same folder. Copy the CSVs into `data/` and convert `summary.json` into `data/summary.js` as `window.DATA = <json>;`.
+This writes new CSVs and `summary.json` in the same folder. Copy the CSVs next to `index.html` and convert `summary.json` into `summary.js` as `window.DATA = <json>;`.
 
 ## Important
 The "after" numbers are a rule-based projection from stated assumptions, not measured results. The dashboard says so on the Overview and in chapter 7.
