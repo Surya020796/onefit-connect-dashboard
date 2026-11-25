@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OneFit Connect Analytics | Before vs After | Team 4</title>
+<meta name="description" content="OneFit Connect analytics dashboard: Overview, Analysis, Before vs After, Data Explorer and Deep Dive for the three-location Fitness Chain (Team 4, Saint Louis University).">
+<style>
+:root{--navy:#12284C;--blue:#2F6FDB;--blue2:#1F57B8;--sky:#DCE8FA;--bg:#F3F6FB;--card:#fff;--ink:#1D2B44;--muted:#5E6E8A;--rule:#DDE5F1;--before:#9FB3D1;--after:#2F6FDB;--orange:#E5733A;--good:#14806F;--bad:#C0392B;--soft:#FFF5EE;--shadow:0 1px 2px rgba(18,40,76,.06),0 6px 18px rgba(18,40,76,.06)}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:Inter,"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.55}
+a{color:inherit;text-decoration:none}
+body.lock{overflow:hidden}
+nav.top{position:sticky;top:0;z-index:40;background:var(--navy);display:flex;align-items:center;gap:6px;padding:0 24px;overflow-x:auto;box-shadow:0 2px 10px rgba(18,40,76,.25)}
+nav.top .brand{color:#fff;font-weight:800;font-size:16px;margin-right:22px;white-space:nowrap}
+nav.top .brand span{color:#FFB48A}
+nav.top button{background:none;border:0;border-bottom:3px solid transparent;color:#B9C7E0;font:inherit;font-size:14px;font-weight:600;padding:16px 15px 13px;cursor:pointer;white-space:nowrap;transition:.2s}
+nav.top button:hover{color:#fff}
+nav.top button.on{color:#fff;border-bottom-color:var(--orange)}
+.page{max-width:1160px;margin:0 auto;padding:22px 22px 60px;display:none}
+.page.on{display:block;animation:fi .35s both}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}}
+.banner{background:linear-gradient(135deg,#12284C,#1D3F77 70%,#2F6FDB);color:#fff;border-radius:16px;padding:26px 30px;margin-bottom:18px}
+.banner h1,.banner h2{margin:0 0 8px;font-size:26px;line-height:1.2}
+.banner h1 em,.banner h2 em{font-style:normal;color:#FFB48A}
+.banner p{margin:0 0 14px;color:#D6E2F6;max-width:860px}
+.badges{display:flex;gap:8px;flex-wrap:wrap}
+.badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:99px;padding:3px 12px;font-size:12px;color:#E8F0FD}
+.callout{background:var(--soft);border-left:4px solid var(--orange);border-radius:10px;padding:14px 18px;margin:0 0 20px;box-shadow:var(--shadow)}
+.callout b.h{color:var(--orange)}
+.callout.blue{background:#EEF4FE;border-left-color:var(--blue)}.callout.blue b.h{color:var(--blue2)}
+.sec{font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:800;margin:26px 0 12px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:0 0 4px}
+.stat{background:var(--card);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);border-top:4px solid var(--orange)}
+.stat:nth-child(2){border-top-color:var(--blue)}.stat:nth-child(3){border-top-color:#8A5FD0}.stat:nth-child(4){border-top-color:var(--good)}
+.stat b{display:block;font-size:30px;line-height:1.1;color:var(--navy)}
+.stat .l{font-size:11.5px;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);font-weight:700}
+.stat .s{font-size:13px;color:var(--orange);font-weight:600}
+.legend{display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--muted);margin:0 0 12px}
+.legend s{display:inline-block;width:11px;height:11px;margin-right:6px;border-radius:3px;text-decoration:none}
+.ovg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.kc{background:var(--card);border-radius:14px;box-shadow:var(--shadow);cursor:pointer;display:flex;flex-direction:column;border:1px solid transparent;transition:transform .2s,border-color .2s,box-shadow .2s}
+.kc:hover{transform:translateY(-4px);border-color:var(--blue);box-shadow:0 10px 28px rgba(47,111,219,.18)}
+.kc .h{padding:14px 16px 0;display:flex;justify-content:space-between;gap:10px}
+.kn{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--blue);font-weight:800}
+.nm{font-size:16px;font-weight:700;color:var(--navy);line-height:1.25}
+.open{flex:none;width:28px;height:28px;border-radius:50%;background:var(--sky);color:var(--blue2);display:grid;place-items:center;font-weight:800;transition:.25s}
+.kc:hover .open{background:var(--blue);color:#fff;transform:rotate(45deg)}
+.nums{display:flex;align-items:flex-end;gap:12px;padding:6px 16px 0;flex-wrap:wrap}
+.a{font-size:38px;font-weight:800;line-height:1;color:var(--blue2)}
+.bf{font-size:12px;color:var(--muted);line-height:1.35;padding-bottom:4px}.bf b{color:var(--ink)}
+.dd{margin-left:auto;font-weight:800;font-size:12.5px;background:#EEF4FE;border-radius:99px;padding:3px 10px}
+.good{color:var(--good)}.bad{color:var(--bad)}
+.cb{padding:4px 12px}.box{position:relative;height:190px}
+.cap2{padding:4px 16px 14px;font-size:12px;color:var(--muted);display:flex;justify-content:space-between}
+.cap2 em{font-style:normal;color:var(--blue);font-weight:700}
+.insg{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.ins{background:var(--card);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);border-left:4px solid var(--blue)}
+.ins h4{margin:0 0 4px;font-size:14px;color:var(--navy)}.ins p{margin:0;font-size:13.5px;color:#3a4a66}.ins .k{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--blue)}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.fl{background:var(--card);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);cursor:pointer;transition:.2s;border-top:4px solid var(--blue)}
+.fl:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(47,111,219,.16)}
+.fl b{display:block;color:var(--navy);margin:2px 0}.fl span{font-size:13px;color:var(--muted)}.fl i{font-style:normal;font-size:11px;font-weight:800;color:var(--orange);letter-spacing:1px}
+.cards2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cc{background:var(--card);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow)}
+.cc h3{margin:0 0 2px;font-size:16px;color:var(--navy)}.cc .d{font-size:13px;color:var(--muted);margin:0 0 8px}
+.cc .box{height:290px}.cc .box.tall{height:340px}
+.cc .tag{font-size:12.5px;color:var(--blue2);background:#EEF4FE;border-radius:8px;padding:6px 10px;margin-top:8px}
+.ba{display:grid;grid-template-columns:1fr 210px 1fr;gap:16px;align-items:stretch}
+.bp{border-radius:14px;padding:16px 18px}.bp.b{background:#FDF0EC;border:1px solid #F3D1C6}.bp.a2{background:#EAF7F3;border:1px solid #BFE3D8}
+.bp h5{margin:0 0 8px;font-size:11.5px;letter-spacing:1px;text-transform:uppercase}.bp.b h5{color:var(--bad)}.bp.a2 h5{color:var(--good)}
+.bp .r{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.07);font-size:14px}.bp .r:last-child{border:0}.bp .r b{font-size:15px}.bp.b .r b{color:var(--bad)}.bp.a2 .r b{color:var(--good)}
+.mid{background:var(--navy);color:#fff;border-radius:14px;padding:18px;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:6px}
+.mid .ar{font-size:28px}.mid b{font-size:20px;color:#FFB48A}.mid small{color:#B9C7E0}
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.tr{background:var(--card);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);text-align:center}.tr b{font-size:24px;color:var(--navy)}.tr b span{color:var(--blue)}.tr small{display:block;color:var(--muted)}
+.kins{display:grid;gap:10px}.ki{background:var(--card);border-radius:12px;padding:12px 16px;box-shadow:var(--shadow);border-left:4px solid var(--good)}.ki b{color:var(--navy)}
+table.t{border-collapse:collapse;width:100%;font-size:14px;background:var(--card);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+table.t th{background:var(--navy);color:#fff;text-align:left;padding:9px 11px;font-size:12.5px}
+table.t td{padding:9px 11px;border-bottom:1px solid var(--rule)}table.t tr:nth-child(even) td{background:#F8FAFD}.n{text-align:right}
+.dl a{display:inline-block;margin:10px 8px 0 0;padding:8px 14px;border:1px solid var(--navy);border-radius:8px;color:var(--navy);font-weight:700;font-size:13px}.dl a:hover{background:var(--navy);color:#fff}
+.warn{background:#FFF8E5;border:1px solid #F0D58A;border-radius:10px;padding:10px 14px;font-size:13.5px;color:#5c4400;margin:16px 0 0}
+/* explorer */
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.tools input,.tools select{border:1px solid var(--rule);background:#fff;border-radius:8px;padding:9px 11px;font:inherit;font-size:14px;color:var(--ink)}
+.tools input{flex:1;min-width:200px}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:9px;overflow:hidden;background:#fff}.seg button{border:0;background:none;padding:9px 14px;font:inherit;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer}.seg button.on{background:var(--blue);color:#fff}
+.tw{background:var(--card);border-radius:12px;box-shadow:var(--shadow);overflow:auto;max-height:640px}
+.tw table{border-collapse:collapse;width:100%;font-size:13.5px}
+.tw th{position:sticky;top:0;background:#EDF2FA;text-align:left;padding:9px 10px;color:var(--muted);font-size:12px;cursor:pointer;white-space:nowrap}
+.tw th:hover{color:var(--blue)}
+.tw td{padding:8px 10px;border-top:1px solid #EEF2F8;white-space:nowrap}.tw tr:hover td{background:#F4F8FE}
+.pill{display:inline-block;border-radius:99px;padding:1px 9px;font-size:12px;font-weight:700}.pill.y{background:#FDE3DE;color:var(--bad)}.pill.nn{background:#E4F4EF;color:var(--good)}
+.pg{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:13.5px;color:var(--muted)}.pg button{border:1px solid var(--rule);background:#fff;border-radius:8px;padding:7px 14px;font:inherit;font-weight:700;cursor:pointer}.pg button:disabled{opacity:.4;cursor:default}
+.miniK{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:0 0 12px}.miniK div{background:var(--card);border-radius:10px;padding:8px 12px;box-shadow:var(--shadow)}.miniK b{display:block;font-size:20px;color:var(--navy)}.miniK small{color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.6px}
+/* heat table */
+.heat td,.heat th{text-align:center}.heat td:first-child,.heat th:first-child{text-align:left}
+/* modal */
+.mbg{position:fixed;inset:0;z-index:100;background:rgba(18,40,76,.55);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:18px}
+.mbg.on{display:flex;animation:fi2 .2s both}@keyframes fi2{from{opacity:0}}
+.modal{width:min(1080px,100%);max-height:92vh;overflow:auto;background:var(--bg);border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:zoom .4s cubic-bezier(.2,1.1,.3,1) both;transform-origin:var(--ox,50%) var(--oy,50%)}
+@keyframes zoom{from{opacity:0;transform:scale(.6) translateY(30px)}to{opacity:1;transform:none}}
+.modal.out{animation:zo .18s ease-in both}@keyframes zo{to{opacity:0;transform:scale(.92)}}
+.mh{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;padding:12px 18px;background:var(--navy);color:#fff}
+.mh .st{font-size:12px;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:#B9C7E0}.mh .sp{flex:1}
+.mh .x{width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;font-size:20px;cursor:pointer}.mh .x:hover{background:var(--orange)}
+.mb{padding:20px 26px 6px}.mb h2{font-size:30px;line-height:1.15;color:var(--navy);margin:4px 0 10px}
+.crumb{font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:var(--blue);font-weight:800}
+.lead{font-size:15.5px;max-width:860px;margin:0 0 14px}.lead b{color:var(--blue2)}
+.figs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fig{background:var(--card);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}.fig .cap{padding:10px 14px;font-weight:700;color:var(--navy);font-size:14px;border-bottom:1px solid var(--rule)}.fig .cap span{font-weight:400;color:var(--muted)}
+.fig .body{padding:10px 12px 4px}.fig .box{height:270px}.fig .note{font-size:12px;color:var(--muted);padding:0 14px 12px}
+.finding{margin:16px 0 4px;padding:13px 16px;border-left:5px solid var(--blue);background:#EEF4FE;border-radius:10px}.finding b{color:var(--navy)}.finding small{display:block;color:var(--muted);margin-top:3px;font-size:13px}
+.mf{display:flex;justify-content:space-between;gap:10px;padding:10px 26px 20px}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:9px;padding:9px 18px;font:inherit;font-weight:700;cursor:pointer}.btn:hover{background:var(--blue2)}.btn.sec{background:#fff;color:var(--navy);border:1px solid var(--rule);text-transform:none;letter-spacing:0;font-size:15px;margin:0}
+footer{text-align:center;color:var(--muted);font-size:12.5px;padding:10px 0 30px}
+#nochart{display:none;background:#FFF3CD;color:#5c4400;padding:10px 24px;font-size:14px}
+@media(max-width:1000px){.ovg,.insg{grid-template-columns:repeat(2,1fr)}.stats,.flow{grid-template-columns:repeat(2,1fr)}.ba{grid-template-columns:1fr}.cards2{grid-template-columns:1fr}.miniK{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.ovg,.insg,.stats,.flow,.trio,.figs{grid-template-columns:1fr}.page{padding:16px 14px 50px}.banner{padding:20px}.miniK{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div id="nochart">The chart library did not load. Make sure chart.umd.js was uploaded with this page.</div>
+<nav class="top" id="tabs"><span class="brand">OneFit <span>Connect</span> Analytics</span></nav>
+
+<section class="page" id="p-overview"></section>
+<section class="page" id="p-analysis"></section>
+<section class="page" id="p-ba"></section>
+<section class="page" id="p-explorer"></section>
+<section class="page" id="p-deep"></section>
+<footer>Team 4: Sree Kavya &middot; Siddhartha &middot; Surya Sunder &middot; Krishna Vamsi &middot; Information Systems, Saint Louis University &middot; Synthetic data; the &quot;after&quot; figures are projections.</footer>
+<div class="mbg" id="mbg"><div class="modal" id="modal" role="dialog" aria-modal="true"></div></div>
+
+<script src="chart.umd.js"></script>
+<script src="summary.js?v=20261126"></script>
+<script src="sessions.js?v=20261126"></script>
+<script>
+(function(){
+'use strict';
+if(!window.DATA||!window.DATA.before||!window.SESS){var nc=document.getElementById('nochart');nc.style.display='block';nc.textContent='The data files did not load. Refresh the page (Ctrl+Shift+R, or Cmd+Shift+R on Mac) and make sure summary.js and sessions.js were uploaded.';return}
+var D=window.DATA,B=D.before,A=D.after,MONTHS=D.months;
+var LOCS=['LOC01','LOC02','LOC03'],LL=['Location 1','Location 2','Location 3'],CLS=['Spin','HIIT','Strength','Pilates','Yoga','Zumba'];
+var CB='#9FB3D1',CA='#2F6FDB',ORG='#E5733A';
+if(typeof Chart!=='undefined'){Chart.defaults.color='#5E6E8A';Chart.defaults.font.family='Inter,"Segoe UI",Arial,sans-serif';Chart.defaults.borderColor='#E6ECF5';Chart.defaults.animation={duration:900,easing:'easeOutQuart'}}
+/* ---------- session-level data ---------- */
+var C={id:0,date:1,loc:2,ins:3,cls:4,cap:5,peak:6,book:7,att:8,den:9,churn:10,err:11,rev:12,cost:13,profit:14,rating:15};
+var S={before:window.SESS.before,after:window.SESS.after};
+function sum(rows,k){var s=0;rows.forEach(function(r){s+=r[C[k]]});return s}
+function mean(a){return a.length?a.reduce(function(x,y){return x+y},0)/a.length:0}
+function util(rows){var c=sum(rows,'cap');return c?sum(rows,'att')/c*100:0}
+function margin(rows){var r=sum(rows,'rev');return r?sum(rows,'profit')/r*100:0}
+function flt(rows,f){return rows.filter(f)}
+function month(r){return +r[C.date].slice(5,7)}
+function fill(r){return r[C.att]/r[C.cap]*100}
+function corr(x,y){var mx=mean(x),my=mean(y),n=x.length,sxy=0,sxx=0,syy=0;for(var i=0;i<n;i++){sxy+=(x[i]-mx)*(y[i]-my);sxx+=Math.pow(x[i]-mx,2);syy+=Math.pow(y[i]-my,2)}return sxy/Math.sqrt(sxx*syy)}
+var pct=function(v,d){return v.toFixed(d===undefined?1:d)+'%'};
+var num=function(v){return Math.round(v).toLocaleString('en-US')};
+var usd=function(v){return '$'+Math.round(v).toLocaleString('en-US')};
+B.overall.off=B.byPeak['0'].util;A.overall.off=A.byPeak['0'].util;
+var KP=[
+ {k:'off',name:'Off-peak utilization',better:'up',view:'ch1'},
+ {k:'util',name:'Seat utilization rate',better:'up',view:'ch1'},
+ {k:'denied',name:'Cross-location requests turned away',better:'down',view:'ch2'},
+ {k:'churn',name:'Churn-risk share of attendees',better:'down',view:'ch4'},
+ {k:'rating',name:'Average member rating',better:'up',view:'ch6'},
+ {k:'margin',name:'Profit margin',better:'up',view:'ch5'}];
+function fmt(k,v){return k==='denied'?v.toLocaleString('en-US'):(k==='rating'?v.toFixed(2):v.toFixed(1)+'%')}
+function delta(k,b,a,better){var d=a-b,good=(better==='up'?d>0:d<0),p=k==='denied'?Math.round(d/b*100)+'%':(k==='rating'?(d>=0?'+':'')+d.toFixed(2):(d>=0?'+':'')+d.toFixed(1)+' pts');return '<span class="'+(good?'good':'bad')+'">'+(d>0?'&#9650; ':'&#9660; ')+p+'</span>'}
+/* derived facts (live from the session tables) */
+var bo=flt(S.before,function(r){return r[C.peak]===0}),ao=flt(S.after,function(r){return r[C.peak]===0});
+var F={};
+F.offLoss=flt(bo,function(r){return r[C.profit]<0}).length/bo.length*100;
+F.offLossA=flt(ao,function(r){return r[C.profit]<0}).length/ao.length*100;
+var denTot=sum(S.before,'den');F.denEmpty=sum(flt(S.before,function(r){return fill(r)<=75&&r[C.den]>0}),'den')/denTot*100;
+F.errRate=LOCS.map(function(l){var q=flt(S.before,function(r){return r[C.loc]===l});return flt(q,function(r){return r[C.err]!=='No Error'}).length/q.length*100});
+var withE=flt(S.before,function(r){return r[C.err]!=='No Error'}),noE=flt(S.before,function(r){return r[C.err]==='No Error'});
+F.rE=mean(withE.map(function(r){return r[C.rating]}));F.rN=mean(noE.map(function(r){return r[C.rating]}));
+F.accB=noE.length/S.before.length*100;F.accA=flt(S.after,function(r){return r[C.err]==='No Error'}).length/S.after.length*100;
+function clsStat(rows,c){var q=flt(rows,function(r){return r[C.cls]===c});return{util:util(q),pps:sum(q,'profit')/q.length,margin:margin(q)}}
+F.spin=clsStat(S.before,'Spin');F.yoga=clsStat(S.before,'Yoga');
+
+/* ---------- chart helpers ---------- */
+var charts={},FM={};
+var valuePlugin={id:'vals',afterDatasetsDraw:function(c){if(c.config.type!=='bar'||!c.options.plugins.valsOn)return;var ctx=c.ctx;ctx.save();ctx.font='bold 11px Arial';ctx.fillStyle='#1D2B44';ctx.textAlign='center';
+ c.data.datasets.forEach(function(ds,i){var m=c.getDatasetMeta(i);if(m.hidden)return;m.data.forEach(function(el,j){var v=ds.data[j];var f=FM[c.canvas.id];if(v!==null&&v!==undefined)ctx.fillText(f?f(v):v,el.x,el.y-4)})});ctx.restore()}};
+var tries={},curTab='overview';
+function warnBox(msg){var pg=document.querySelector('.page.on');if(!pg||pg.querySelector('.cerr'))return;var n=document.createElement('div');n.className='warn cerr';n.textContent='A chart could not be drawn ('+msg+'). Please refresh with Ctrl+Shift+R.';pg.insertBefore(n,pg.firstChild)}
+function mk(id,cfg){var el=document.getElementById(id);if(!el||typeof Chart==='undefined')return;
+ var par=el.parentNode,w=par.clientWidth,hh=par.clientHeight;
+ if(!w||!hh){tries[id]=(tries[id]||0)+1;if(tries[id]<20)setTimeout(function(){mk(id,cfg)},100);return}
+ tries[id]=0;
+ try{if(charts[id])charts[id].destroy();FM[id]=cfg.options.fmt;delete cfg.options.fmt;cfg.options.plugins=cfg.options.plugins||{};if(cfg.options.vals!==false&&cfg.type==='bar')cfg.options.plugins.valsOn=true;delete cfg.options.vals;
+  cfg.options.responsive=false;cfg.options.maintainAspectRatio=false;cfg.options.animation=cfg.options.animation||{duration:900};
+  el.width=w;el.height=hh;el.style.width=w+'px';el.style.height=hh+'px';
+  cfg.plugins=(cfg.plugins||[]).concat([valuePlugin]);charts[id]=new Chart(el,cfg)}catch(x){if(window.console)console.error(id,x);warnBox(id+': '+x.message)}}
+function scl(o){o=o||{};return{y:{beginAtZero:o.min===undefined,min:o.min,max:o.max,title:{display:!!o.yt,text:o.yt},grid:{color:'#E6ECF5'}},x:{grid:{display:false},title:{display:!!o.xt,text:o.xt}}}}
+function barCfg(labels,b,a,f,o){o=o||{};var ds=[{label:'Before',data:b,backgroundColor:CB,borderRadius:4}];if(a)ds.push({label:'After (projected)',data:a,backgroundColor:CA,borderRadius:4});
+ return{type:'bar',data:{labels:labels,datasets:ds},options:{fmt:f,responsive:true,maintainAspectRatio:false,layout:{padding:{top:16}},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+f(c.parsed.y)}}}},scales:scl(o)}}}
+function lineCfg(labels,b,a,f,o){o=o||{};var ds=[{label:'Before',data:b,borderColor:CB,backgroundColor:CB,tension:.3,pointRadius:4}];if(a)ds.push({label:'After (projected)',data:a,borderColor:CA,backgroundColor:CA,tension:.3,pointRadius:4});
+ return{type:'line',data:{labels:labels,datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+f(c.parsed.y)}}}},scales:scl(o)}}}
+function box(id,h){return '<div class="box'+(h?' '+h:'')+'"><canvas id="'+id+'"></canvas></div>'}
+function cc(id,title,desc,tag,h){return '<div class="cc"><h3>'+title+'</h3><p class="d">'+desc+'</p>'+box(id,h)+(tag?'<div class="tag">'+tag+'</div>':'')+'</div>'}
+var LEG='<div class="legend"><span><s style="background:'+CB+'"></s>Before (baseline)</span><span><s style="background:'+CA+'"></s>After (projected)</span></div>';
+function g(o,l,k){return o.byLoc[l][k]}function arr(o,k){return LOCS.map(function(l){return g(o,l,k)})}
+function marr(o,k){return [1,2,3,4,5,6].map(function(m){return o.byMonth[m][k]})}function carr(o,k){return CLS.map(function(c){return o.byClass[c][k]})}
+function bin(rows,fn,edges){var out=edges.map(function(){return[]});rows.forEach(function(r){var v=fn(r);for(var i=edges.length-1;i>=0;i--){if(v>=edges[i]){out[i].push(r);break}}});return out}
+
+/* ================= OVERVIEW ================= */
+var OVC={off:'Off-peak utilization by location',util:'Utilization by month',denied:'Turned away by location',churn:'Churn-risk share by month',rating:'Average rating by location',margin:'Profit margin by location'};
+function kpiCards(){return KP.map(function(x,i){var b=B.overall[x.k],a=A.overall[x.k];return '<div class="kc" data-open="'+x.view+'" data-k="'+x.k+'"><div class="h"><div><div class="kn">KPI '+(i+1)+'</div><div class="nm">'+x.name+'</div></div><div class="open">+</div></div>'+
+ '<div class="nums"><div class="a">'+fmt(x.k,a)+'</div><div class="bf">After (projected)<br>Before: <b>'+fmt(x.k,b)+'</b></div><div class="dd">'+delta(x.k,b,a,x.better)+'</div></div>'+
+ '<div class="cb">'+box('ov_'+x.k)+'</div><div class="cap2"><span>'+OVC[x.k]+'</span><em>Click for details</em></div></div>'}).join('')}
+function kpiInsights(){var I=[
+ ['KPI 1 &middot; Off-peak utilization','Room to grow is off-peak','Peak classes are '+pct(B.byPeak['1'].util)+' full but off-peak only '+pct(B.overall.off)+'. '+pct(F.offLoss)+' of off-peak sessions lose money. After: '+pct(A.overall.off)+' full and '+pct(F.offLossA)+' lose money.'],
+ ['KPI 2 &middot; Seat utilization','Fuller rooms, no new classes','Overall fill rises from '+pct(B.overall.util)+' to '+pct(A.overall.util)+' with the same schedule: '+num(A.overall.attendance-B.overall.attendance)+' more visits over six months.'],
+ ['KPI 3 &middot; Turned away','Demand refused while seats sat empty',num(B.overall.denied)+' cross-location requests were refused. '+pct(F.denEmpty,0)+' of them were in rooms with at least a quarter of seats empty. One shared membership cuts this by '+Math.round((1-A.overall.denied/B.overall.denied)*100)+'%.'],
+ ['KPI 4 &middot; Churn-risk share','Quiet drift becomes visible','Churn-risk share of attendees falls from '+pct(B.overall.churn)+' to '+pct(A.overall.churn)+'. The score lets staff reach out to members whose visits are slipping before they cancel.'],
+ ['KPI 5 &middot; Member rating','Errors cost ratings','A session with a record error is rated '+F.rE.toFixed(2)+' against '+F.rN.toFixed(2)+' without one. Preventing errors lifts the chain average from '+B.overall.rating.toFixed(2)+' to '+A.overall.rating.toFixed(2)+'.'],
+ ['KPI 6 &middot; Profit margin','Profit follows attendance','Margin rises from '+pct(B.overall.margin)+' to '+pct(A.overall.margin)+' after paying '+usd(D.assumptions.PLATFORM_COST_TOTAL)+' for the platform. Total profit moves from '+usd(B.overall.profit)+' to '+usd(A.overall.profit)+'.']];
+ return I.map(function(x){return '<div class="ins"><div class="k">'+x[0]+'</div><h4>'+x[1]+'</h4><p>'+x[2]+'</p></div>'}).join('')}
+function pOverview(){
+ return '<div class="banner"><h1>The Fitness Chain: <em>Booking, Attendance &amp; Churn</em> Analytics</h1><p>This dashboard tells the story of how three locations that cannot see each other leave seats empty, turn members away and lose people quietly. Every chart is evidence. Every number points to the same root cause: three disconnected tools. Then it shows what one shared platform, OneFit Connect, would change.</p>'+
+ '<div class="badges"><span class="badge">2,700 Sessions</span><span class="badge">Jan to Jun 2026</span><span class="badge">3 Locations</span><span class="badge">6 Class types</span><span class="badge">Team 4 &middot; SLU</span></div></div>'+
+ '<div class="stats"><div class="stat"><b>'+num(B.overall.denied)+'</b><div class="l">Requests turned away</div><div class="s">'+pct(F.denEmpty,0)+' in rooms with empty seats</div></div><div class="stat"><b>'+pct(B.overall.off)+'</b><div class="l">Off-peak seats filled</div><div class="s">Peak is '+pct(B.byPeak['1'].util)+'</div></div><div class="stat"><b>'+pct(B.overall.err)+'</b><div class="l">Sessions with a record error</div><div class="s">Rated '+F.rE.toFixed(2)+' vs '+F.rN.toFixed(2)+'</div></div><div class="stat"><b>'+pct(B.overall.churn)+'</b><div class="l">Churn-risk share</div><div class="s">Climbs every month</div></div></div>'+
+ '<div class="sec">Before vs after: six KPIs (click any card for the full story)</div>'+LEG+'<div class="ovg">'+kpiCards()+'</div>'+
+ '<div class="sec">What each KPI tells us</div><div class="insg">'+kpiInsights()+'</div>'+
+ '<div class="callout blue" style="margin-top:22px"><b class="h">The story in one line:</b> the same demand, better handled. Attendance rises by '+num(A.overall.attendance-B.overall.attendance)+' visits, off-peak utilization rises from '+pct(B.overall.off)+' to '+pct(A.overall.off)+', and churn-risk share falls from '+pct(B.overall.churn)+' to '+pct(A.overall.churn)+'. Profit margin includes the '+usd(D.assumptions.PLATFORM_COST_TOTAL)+' platform cost over six months.</div>'+
+ '<div class="warn"><b>Read this first:</b> the "after" data is a rule-based projection built from stated assumptions (see the Before vs After tab), not a measured result.</div>'}
+function dOverview(){var f1=function(v){return v.toLocaleString('en-US')},f2=function(v){return v.toFixed(2)};
+ mk('ov_off',barCfg(LL,LOCS.map(function(l){return B.byLocPeak[l]['0'].util}),LOCS.map(function(l){return A.byLocPeak[l]['0'].util}),pct,{min:0,max:100}));
+ mk('ov_util',lineCfg(MONTHS,marr(B,'util'),marr(A,'util'),pct,{min:40}));
+ mk('ov_denied',barCfg(LL,arr(B,'denied'),arr(A,'denied'),f1));
+ mk('ov_churn',lineCfg(MONTHS,marr(B,'churn'),marr(A,'churn'),pct,{min:0}));
+ mk('ov_rating',barCfg(LL,arr(B,'rating'),arr(A,'rating'),f2,{min:4,max:5}));
+ mk('ov_margin',barCfg(LL,arr(B,'margin'),arr(A,'margin'),pct,{min:0}))}
+
+/* ================= ANALYSIS ================= */
+function pAnalysis(){
+ var sp=F.spin,yo=F.yoga;
+ return '<div class="callout"><b class="h">What the data shows:</b> the deeper we look at the baseline, the clearer the pattern. Seats go empty off-peak, members are turned away while rooms are not full, record errors drag ratings down, and the fullest class is not the most profitable one. These charts use the baseline (before) data only.</div>'+
+ '<div class="sec">Seats and demand</div><div class="cards2">'+
+ cc('an1','Utilization: peak vs off-peak by location','% of seats filled','Peak is already close to full. Off-peak is where seats go empty, and Location 3 has the most.')+
+ cc('an2','Demand by month: visits and utilization','Attendance (bars) and % of seats filled (line)','Demand surges in January and fades through June: the New Year effect. Utilization follows demand.')+'</div>'+
+ '<div class="sec">Demand turned away</div><div class="cards2">'+
+ cc('an3','Turned-away requests by how full the room was','Sessions grouped by fill rate','Requests are refused even in rooms with plenty of empty seats: location-locked memberships, not full classes.')+
+ cc('an4','Turned-away requests by location and month','Count of denied cross-location requests','Every location loses members each month, and the pattern follows the January surge.')+'</div>'+
+ '<div class="sec">The surprise: the fullest class is not the most profitable</div><div class="cards2">'+
+ cc('an5','Utilization vs profit per session by class type','Bars: % of seats filled. Line: average profit per session ($)','Spin is the fullest class ('+pct(sp.util)+') but earns only '+usd(sp.pps)+' a session. Yoga fills '+pct(yo.util)+' and earns '+usd(yo.pps)+'.')+
+ cc('an6','Profit margin by class type','% of revenue','Small 20-seat Spin rooms cannot pay for themselves even when full. Filling seats helps, but class economics matter too.')+'</div>'+
+ '<div class="sec">Record errors and ratings</div><div class="cards2">'+
+ cc('an7','Share of sessions with a record error, by location','% of sessions','Error rates rise with how manual the location\'s tool is: '+pct(F.errRate[0])+', '+pct(F.errRate[1])+' and '+pct(F.errRate[2])+'.')+
+ cc('an8','Average rating: sessions with vs without a record error','1 to 5 scale, axis starts at 3.5','A record error costs about '+(F.rN-F.rE).toFixed(2)+' rating points on that session.')+'</div>'+
+ '<div class="sec">Member churn</div><div class="cards2">'+
+ cc('an9','Churn-risk share of attendees by month','% of attendees','Risk climbs every month after the January surge, and no single location can see it.')+
+ cc('an10','Churn-risk share by location','% of attendees','Similar across locations, so the fix has to be chain-wide, not local.')+'</div>'}
+function dAnalysis(){var f1=function(v){return v.toLocaleString('en-US')};
+ var bp=LOCS.map(function(l){return B.byLocPeak[l]['1'].util}),bo2=LOCS.map(function(l){return B.byLocPeak[l]['0'].util});
+ mk('an1',{type:'bar',data:{labels:LL,datasets:[{label:'Peak hours',data:bp,backgroundColor:'#5B8DEF',borderRadius:4},{label:'Off-peak hours',data:bo2,backgroundColor:ORG,borderRadius:4}]},options:{fmt:pct,responsive:true,maintainAspectRatio:false,layout:{padding:{top:16}},plugins:{legend:{display:true,position:'bottom'}},scales:scl({min:0,max:100})}});
+ mk('an2',{type:'bar',data:{labels:MONTHS,datasets:[{type:'bar',label:'Attendance',data:marr(B,'attendance'),backgroundColor:'#C9D8F2',borderRadius:4,yAxisID:'y',order:2},{type:'line',label:'Utilization %',data:marr(B,'util'),borderColor:ORG,backgroundColor:ORG,tension:.3,pointRadius:4,yAxisID:'y1',order:1}]},options:{vals:false,responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom'}},scales:{y:{beginAtZero:true,grid:{color:'#E6ECF5'},title:{display:true,text:'Attendance'}},y1:{position:'right',min:40,max:90,grid:{display:false},title:{display:true,text:'Utilization %'}},x:{grid:{display:false}}}}});
+ var edges=[0,50,60,70,80,90],lab=['Under 50%','50-59%','60-69%','70-79%','80-89%','90%+'],bb=bin(S.before,fill,edges);
+ mk('an3',{type:'bar',data:{labels:lab,datasets:[{label:'Requests turned away',data:bb.map(function(q){return sum(q,'den')}),backgroundColor:ORG,borderRadius:4}]},options:{fmt:f1,responsive:true,maintainAspectRatio:false,layout:{padding:{top:16}},plugins:{legend:{display:false}},scales:scl({yt:'Turned-away requests',xt:'Room fill rate'})}});
+ mk('an4',{type:'bar',data:{labels:MONTHS,datasets:LOCS.map(function(l,i){return{label:LL[i],data:[1,2,3,4,5,6].map(function(m){return sum(flt(S.before,function(r){return r[C.loc]===l&&month(r)===m}),'den')}),backgroundColor:['#5B8DEF','#9FB3D1',ORG][i],borderRadius:3}})},options:{vals:false,responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom'}},scales:scl({})}});
+ mk('an5',{type:'bar',data:{labels:CLS,datasets:[{type:'bar',label:'Utilization %',data:CLS.map(function(c){return clsStat(S.before,c).util}),backgroundColor:'#C9D8F2',borderRadius:4,yAxisID:'y',order:2},{type:'line',label:'Profit per session ($)',data:CLS.map(function(c){return clsStat(S.before,c).pps}),borderColor:ORG,backgroundColor:ORG,pointRadius:5,tension:.2,yAxisID:'y1',order:1}]},options:{vals:false,responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom'}},scales:{y:{min:0,max:100,grid:{color:'#E6ECF5'},title:{display:true,text:'Utilization %'}},y1:{position:'right',beginAtZero:true,grid:{display:false},title:{display:true,text:'$ per session'}},x:{grid:{display:false}}}}});
+ mk('an6',barCfg(CLS,carr(B,'margin'),null,pct,{}));
+ mk('an7',barCfg(LL,F.errRate,null,pct,{}));
+ mk('an8',barCfg(['No record error','Record error'],[F.rN,F.rE],null,function(v){return v.toFixed(2)},{min:3.5,max:5}));
+ mk('an9',lineCfg(MONTHS,marr(B,'churn'),null,pct,{min:0}));
+ mk('an10',barCfg(LL,arr(B,'churn'),null,pct,{min:0}))}
+
+/* ================= BEFORE vs AFTER ================= */
+function pBA(){var a=D.assumptions;
+ return '<div class="banner"><h2>The <em>OneFit Connect</em> Impact Story</h2><p>This is what changes when the three locations move from separate tools to one shared booking, check-in and reporting layer. The numbers below are not guesses: they are projected from the same 2,700 sessions that diagnosed the problem, using five documented rules. Fix the access and the data, and the rest follows.</p></div>'+
+ '<div class="callout"><b class="h">The root cause is simple:</b> memberships stop at the door of the home location, records are re-typed by hand, and nobody sees the whole chain. OneFit Connect shares one membership, validates every entry, reminds members before class and flags members who are drifting away.</div>'+
+ '<div class="sec">At a glance: what changes</div><div class="ba"><div class="bp b"><h5>Before: three separate tools</h5>'+
+ [['Off-peak utilization',pct(B.overall.off)],['Seat utilization',pct(B.overall.util)],['Requests turned away',num(B.overall.denied)],['Record accuracy',pct(F.accB)],['Churn-risk share',pct(B.overall.churn)],['Average rating',B.overall.rating.toFixed(2)],['Profit margin',pct(B.overall.margin)]].map(function(r){return '<div class="r"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>'}).join('')+'</div>'+
+ '<div class="mid"><div class="ar">&rarr;</div><b>OneFit Connect</b><small>One membership<br>Validated bookings<br>Reminders and outreach</small></div>'+
+ '<div class="bp a2"><h5>After: one shared platform (projected)</h5>'+
+ [['Off-peak utilization',pct(A.overall.off)],['Seat utilization',pct(A.overall.util)],['Requests turned away',num(A.overall.denied)],['Record accuracy',pct(F.accA)],['Churn-risk share',pct(A.overall.churn)],['Average rating',A.overall.rating.toFixed(2)],['Profit margin',pct(A.overall.margin)]].map(function(r){return '<div class="r"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>'}).join('')+'</div></div>'+
+ '<div class="trio"><div class="tr"><b>'+num(B.overall.denied)+' <span>&rarr; '+num(A.overall.denied)+'</span></b><small>Turned-away requests</small></div><div class="tr"><b>'+usd(B.overall.profit)+' <span>&rarr; '+usd(A.overall.profit)+'</span></b><small>Six-month profit, after platform cost</small></div><div class="tr"><b>'+num(B.overall.attendance)+' <span>&rarr; '+num(A.overall.attendance)+'</span></b><small>Total visits</small></div></div>'+
+ '<div class="sec">Comparison charts</div>'+LEG+'<div class="cards2">'+
+ cc('ba1','Utilization: peak vs off-peak hours','% of seats filled','Peak was already close to full; the gain is mostly off-peak.')+
+ cc('ba2','Requests turned away by location','Count','Fewer refused requests at every location.')+
+ cc('ba3','Churn-risk share by month','% of attendees','The after line stays below the before line in every month.')+
+ cc('ba4','Profit margin by class type','% of revenue','Gains are modest for Spin: the platform does not cut its costs.')+
+ cc('ba5','Average rating by location','1 to 5, axis starts at 4.0','Small, conservative gain where errors were most common.')+
+ cc('ba6','Record accuracy by location','% of sessions without a record error','Validation and one-tap check-in prevent most record errors.')+'</div>'+
+ '<div class="sec">Key insights</div><div class="kins">'+
+ '<div class="ki"><b>'+Math.round((1-A.overall.denied/B.overall.denied)*100)+'% fewer turned-away requests</b>: '+num(A.crossBooked)+' of '+num(B.overall.denied)+' refused requests become bookings where seats are free.</div>'+
+ '<div class="ki"><b>+'+num(A.overall.attendance-B.overall.attendance)+' visits with no new classes</b>: off-peak fill rises from '+pct(B.overall.off)+' to '+pct(A.overall.off)+'.</div>'+
+ '<div class="ki"><b>Churn-risk share down '+(B.overall.churn-A.overall.churn).toFixed(1)+' points</b>: '+num(B.overall.churners-A.overall.churners)+' fewer churn-risk attendee visits.</div>'+
+ '<div class="ki"><b>+'+usd(A.overall.profit-B.overall.profit)+' profit after paying for the platform</b>: margin '+pct(B.overall.margin)+' to '+pct(A.overall.margin)+'. It would fall below baseline if every effect were only half as large.</div>'+
+ '<div class="ki"><b>Spin stays the weak spot</b>: margin only moves from '+pct(B.byClass.Spin.margin)+' to '+pct(A.byClass.Spin.margin)+'. Class mix, room size and price need their own review.</div></div>'+
+ '<div class="sec">How the "after" data was built</div><p style="max-width:860px;margin:0 0 12px">We kept the baseline sessions (same dates, classes, locations, instructors) and applied five documented rules, in order. Nothing else changes.</p>'+
+ '<table class="t"><tr><th>#</th><th>Rule</th><th>Assumption</th><th class="n">Value</th></tr>'+
+ '<tr><td>1</td><td>Validation and one-tap check-in prevent record errors</td><td>Share of errors prevented</td><td class="n">'+Math.round(a.A_ERR_PREVENT*100)+'%</td></tr>'+
+ '<tr><td>2</td><td>One shared membership turns away fewer members</td><td>Turned-away requests that book (seat permitting)</td><td class="n">'+Math.round(a.A_XLOC_CONVERT*100)+'%</td></tr>'+
+ '<tr><td>3</td><td>Reminders reduce no-shows</td><td>Would-be no-shows recovered</td><td class="n">'+Math.round(a.A_REMINDER_RECOVER*100)+'%</td></tr>'+
+ '<tr><td>4</td><td>Fewer errors lift ratings</td><td>Rating penalty regained where an error was prevented</td><td class="n">+'+a.RATING_ERR_PENALTY+'</td></tr>'+
+ '<tr><td>5</td><td>Early outreach lowers churn risk</td><td>Reduction in churn-risk attendees</td><td class="n">'+Math.round(a.A_OUTREACH_CUT*100)+'%</td></tr>'+
+ '<tr><td>6</td><td>Platform cost is charged to profit</td><td>Six-month total, spread across sessions</td><td class="n">'+usd(a.PLATFORM_COST_TOTAL)+'</td></tr></table>'+
+ '<div class="callout blue" style="margin-top:14px"><b class="h">Limits:</b> this is a projection from stated assumptions, not observed behavior. Change any assumption in <code>generate_improved_data.py</code> and the data regenerates. The dataset passes the same checks as the baseline: 2,700 rows, no nulls, no duplicate IDs, bookings and attendance never exceed capacity.</div>'+
+ '<p class="dl"><a href="Fitness_Chain_Before_After_Dataset.xlsx">Download Excel (before, after, assumptions)</a><a href="fitness_chain_sessions_before.csv">Before CSV</a><a href="fitness_chain_sessions_after.csv">After CSV</a></p>'}
+function dBA(){var f1=function(v){return v.toLocaleString('en-US')},f2=function(v){return v.toFixed(2)};
+ mk('ba1',barCfg(['Peak hours','Off-peak hours'],[B.byPeak['1'].util,B.byPeak['0'].util],[A.byPeak['1'].util,A.byPeak['0'].util],pct,{min:0,max:100}));
+ mk('ba2',barCfg(LL,arr(B,'denied'),arr(A,'denied'),f1));
+ mk('ba3',lineCfg(MONTHS,marr(B,'churn'),marr(A,'churn'),pct,{min:0}));
+ mk('ba4',barCfg(CLS,carr(B,'margin'),carr(A,'margin'),pct));
+ mk('ba5',barCfg(LL,arr(B,'rating'),arr(A,'rating'),f2,{min:4,max:5}));
+ var acc=function(rows,l){var q=flt(rows,function(r){return r[C.loc]===l});return flt(q,function(r){return r[C.err]==='No Error'}).length/q.length*100};
+ mk('ba6',barCfg(LL,LOCS.map(function(l){return acc(S.before,l)}),LOCS.map(function(l){return acc(S.after,l)}),pct,{min:60,max:100}))}
+
+/* ================= DATA EXPLORER ================= */
+var EX={set:'before',q:'',loc:'',cls:'',peak:'',err:'',mon:'',sort:'id',dir:1,page:0,per:20};
+function pExplorer(){
+ var sel=function(id,label,opts){return '<select id="'+id+'"><option value="">'+label+'</option>'+opts.map(function(o){return '<option value="'+o[0]+'">'+o[1]+'</option>'}).join('')+'</select>'};
+ return '<div class="callout blue"><b class="h">Explore every session.</b> 2,700 class sessions for the baseline and the projected after. Filter, search, sort by any column, and watch the KPIs recalculate for the rows you picked.</div>'+
+ '<div class="tools"><div class="seg" id="exset"><button data-set="before" class="on">Before (baseline)</button><button data-set="after">After (projected)</button></div><input id="exq" placeholder="Search session number or instructor (e.g. 120 or INS05)">'+
+ sel('exloc','All locations',LOCS.map(function(l,i){return [l,LL[i]]}))+sel('excls','All classes',CLS.map(function(c){return [c,c]}))+sel('expeak','Peak and off-peak',[['1','Peak hours'],['0','Off-peak hours']])+sel('exerr','All records',[['e','Record errors only'],['n','No record error']])+sel('exmon','All months',MONTHS.map(function(m,i){return [i+1,m]}))+'</div>'+
+ '<div class="miniK" id="exk"></div><div class="tw"><table><thead id="exh"></thead><tbody id="exb"></tbody></table></div><div class="pg"><span id="exinfo"></span><span><button id="exprev">&larr; Prev</button> <span id="expg" style="margin:0 8px"></span> <button id="exnext">Next &rarr;</button></span></div>'}
+var EXC=[['id','#'],['date','Date'],['loc','Location'],['ins','Instructor'],['cls','Class'],['peak','Hours'],['cap','Seats'],['book','Booked'],['att','Attended'],['fill','Fill %'],['den','Turned away'],['churn','Churn risk'],['err','Record error'],['rev','Revenue'],['profit','Profit'],['rating','Rating']];
+function exRows(){var rows=S[EX.set],q=EX.q.trim().toLowerCase();
+ rows=rows.filter(function(r){if(EX.loc&&r[C.loc]!==EX.loc)return false;if(EX.cls&&r[C.cls]!==EX.cls)return false;if(EX.peak!==''&&String(r[C.peak])!==EX.peak)return false;if(EX.err==='e'&&r[C.err]==='No Error')return false;if(EX.err==='n'&&r[C.err]!=='No Error')return false;if(EX.mon&&month(r)!==+EX.mon)return false;
+  if(q&&String(r[C.id]).indexOf(q.replace(/^ses0*/,''))<0&&r[C.ins].toLowerCase().indexOf(q)<0)return false;return true});
+ var k=EX.sort,get=function(r){return k==='fill'?fill(r):r[C[k]]};
+ rows=rows.slice().sort(function(a,b){var x=get(a),y=get(b);return (x<y?-1:x>y?1:0)*EX.dir});return rows}
+function dExplorer(){var rows=exRows(),n=rows.length,pages=Math.max(1,Math.ceil(n/EX.per));if(EX.page>=pages)EX.page=pages-1;
+ var chip=function(e){return e==='No Error'?'<span class="pill nn">No</span>':'<span class="pill y" title="'+e+'">'+e+'</span>'};
+ document.getElementById('exh').innerHTML='<tr>'+EXC.map(function(c){return '<th data-sort="'+c[0]+'">'+c[1]+(EX.sort===c[0]?(EX.dir>0?' &#9650;':' &#9660;'):'')+'</th>'}).join('')+'</tr>';
+ document.getElementById('exb').innerHTML=rows.slice(EX.page*EX.per,EX.page*EX.per+EX.per).map(function(r){var f=fill(r);return '<tr><td>'+r[C.id]+'</td><td>'+r[C.date]+'</td><td>'+LL[LOCS.indexOf(r[C.loc])]+'</td><td>'+r[C.ins]+'</td><td>'+r[C.cls]+'</td><td>'+(r[C.peak]?'Peak':'Off-peak')+'</td><td>'+r[C.cap]+'</td><td>'+r[C.book]+'</td><td>'+r[C.att]+'</td><td style="color:'+(f<50?'var(--bad)':f>=80?'var(--good)':'inherit')+';font-weight:700">'+f.toFixed(0)+'%</td><td>'+r[C.den]+'</td><td>'+r[C.churn]+'</td><td>'+chip(r[C.err])+'</td><td>'+usd(r[C.rev])+'</td><td style="color:'+(r[C.profit]<0?'var(--bad)':'inherit')+'">'+(r[C.profit]<0?'-':'')+usd(Math.abs(r[C.profit]))+'</td><td>'+r[C.rating].toFixed(2)+'</td></tr>'}).join('')||'<tr><td colspan="16" style="text-align:center;padding:24px;color:var(--muted)">No sessions match these filters.</td></tr>';
+ document.getElementById('exk').innerHTML=[[num(n),'Sessions'],[n?pct(util(rows)):'-','Seat utilization'],[n?pct(margin(rows)):'-','Profit margin'],[num(sum(rows,'den')),'Turned away'],[n?(sum(rows,'att')?pct(sum(rows,'churn')/sum(rows,'att')*100):'-'):'-','Churn-risk share']].map(function(x){return '<div><b>'+x[0]+'</b><small>'+x[1]+'</small></div>'}).join('');
+ document.getElementById('exinfo').textContent=n?'Showing '+(EX.page*EX.per+1)+'-'+Math.min(n,EX.page*EX.per+EX.per)+' of '+num(n)+' sessions':'0 sessions';
+ document.getElementById('expg').textContent='Page '+(EX.page+1)+' of '+pages;document.getElementById('exprev').disabled=EX.page===0;document.getElementById('exnext').disabled=EX.page>=pages-1}
+function bindExplorer(){
+ var rd=function(){EX.q=document.getElementById('exq').value;EX.loc=document.getElementById('exloc').value;EX.cls=document.getElementById('excls').value;EX.peak=document.getElementById('expeak').value;EX.err=document.getElementById('exerr').value;EX.mon=document.getElementById('exmon').value;EX.page=0;dExplorer()};
+ ['exq','exloc','excls','expeak','exerr','exmon'].forEach(function(id){document.getElementById(id).addEventListener(id==='exq'?'input':'change',rd)});
+ document.getElementById('exset').addEventListener('click',function(e){var b=e.target.closest('[data-set]');if(!b)return;EX.set=b.getAttribute('data-set');Array.prototype.forEach.call(this.children,function(x){x.classList.toggle('on',x===b)});EX.page=0;dExplorer()});
+ document.getElementById('exh').addEventListener('click',function(e){var t=e.target.closest('[data-sort]');if(!t)return;var k=t.getAttribute('data-sort');EX.dir=EX.sort===k?-EX.dir:1;EX.sort=k;dExplorer()});
+ document.getElementById('exprev').addEventListener('click',function(){EX.page=Math.max(0,EX.page-1);dExplorer()});
+ document.getElementById('exnext').addEventListener('click',function(){EX.page++;dExplorer()})}
+
+/* ================= DEEP DIVE ================= */
+var instStats=null;
+function pDeep(){
+ return '<div class="callout"><b class="h">The utilization variable is the key to this entire analysis.</b> Utilization is Attendance divided by Class_Capacity: how full a room was. It decides how much revenue a session earns against a cost that barely moves, so it explains empty off-peak seats, losing sessions and the Spin paradox. The charts below make the relationship hard to ignore.</div>'+
+ '<div class="insg" style="margin-bottom:6px"><div class="ins" style="border-left-color:var(--good)"><h4>Peak hours: about '+pct(B.byPeak['1'].util,0)+' full</h4><p>Peak classes are nearly full. There is little room to grow, and members who want a peak seat at another location get turned away.</p></div><div class="ins" style="border-left-color:var(--orange)"><h4>Off-peak: about '+pct(B.overall.off,0)+' full</h4><p>Roughly half the seats are empty, and '+pct(F.offLoss,0)+' of off-peak sessions lose money. This is where the platform has most to gain.</p></div><div class="ins" style="border-left-color:#8A5FD0"><h4>Spin: '+pct(F.spin.util,0)+' full, '+usd(F.spin.pps)+' a session</h4><p>Full rooms alone do not guarantee profit. Spin is the fullest class and the least profitable, because of its small room and its cost.</p></div></div>'+
+ '<div class="sec">Fill rate distribution and profit</div><div class="cards2">'+
+ cc('dp1','Distribution of sessions by fill rate','Number of sessions, before vs after','Most sessions sit between 50% and 90% full. After the platform the distribution shifts to the right.')+
+ cc('dp2','Average profit per session by fill rate','Baseline sessions grouped by fill rate','Profit rises with every step up in fill rate: a dose-response. Under 50% full, sessions lose money on average.')+'</div>'+
+ '<div class="sec">Where the gains are</div><div class="cards2">'+
+ cc('dp3','Off-peak utilization by class type','% of off-peak seats filled','Every class gains off-peak, and the gap to peak is widest where seats go emptiest.')+
+ cc('dp4','Instructor load vs utilization','Each dot is one instructor: sessions taught (x) and % of seats filled (y)','',  'tall')+'</div>'+
+ '<div class="sec">Heat table: utilization by class and hours</div><div id="dpheat"></div>'+
+ '<div class="sec">Fill rate and member experience</div><div class="cards2">'+
+ cc('dp5','Average rating by fill rate','Baseline sessions grouped by fill rate','Rating barely moves with fill rate: full rooms are not unhappy rooms.')+
+ cc('dp6','Churn-risk share by fill rate','% of attendees flagged as churn risk','Churn risk is higher in emptier rooms (18.8% under 30% full, 14.8% at 90%+), so crowding is not the driver. It needs its own early-warning score.')+'</div>'}
+function dDeep(){
+ var f1=function(v){return v.toLocaleString('en-US')},edges=[0,30,50,60,70,80,90],lab=['Under 30%','30-49%','50-59%','60-69%','70-79%','80-89%','90%+'];
+ var bb=bin(S.before,fill,edges),ab=bin(S.after,fill,edges);
+ mk('dp1',barCfg(lab,bb.map(function(q){return q.length}),ab.map(function(q){return q.length}),f1,{yt:'Sessions',xt:'Room fill rate'}));
+ mk('dp2',barCfg(lab,bb.map(function(q){return q.length?sum(q,'profit')/q.length:0}),null,function(v){return (v<0?'-':'')+'$'+Math.abs(Math.round(v))},{yt:'$ per session',xt:'Room fill rate'}));
+ mk('dp3',barCfg(CLS,CLS.map(function(c){return util(flt(bo,function(r){return r[C.cls]===c}))}),CLS.map(function(c){return util(flt(ao,function(r){return r[C.cls]===c}))}),pct,{min:0,max:100}));
+ var ins={};S.before.forEach(function(r){var o=ins[r[C.ins]]||(ins[r[C.ins]]={n:0,att:0,cap:0});o.n++;o.att+=r[C.att];o.cap+=r[C.cap]});
+ var keys=Object.keys(ins).sort(),pts=keys.map(function(k){return{x:ins[k].n,y:ins[k].att/ins[k].cap*100,id:k}}),r=corr(pts.map(function(p){return p.x}),pts.map(function(p){return p.y}));
+ mk('dp4',{type:'scatter',data:{datasets:[{label:'Instructors',data:pts,backgroundColor:CA,pointRadius:6}]},options:{vals:false,responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw.id+': '+c.raw.x+' sessions, '+c.raw.y.toFixed(1)+'% full'}}}},scales:{x:{title:{display:true,text:'Sessions taught'},grid:{color:'#E6ECF5'}},y:{title:{display:true,text:'% of seats filled'},min:40,max:90,grid:{color:'#E6ECF5'}}}}});
+ var tag=document.querySelector('#dp4');if(tag&&!tag.parentNode.parentNode.querySelector('.tag')){var d=document.createElement('div');d.className='tag';d.textContent='Correlation between sessions taught and utilization: r = '+r.toFixed(2)+'. Not an instructor problem: utilization depends on the time slot and class, not on who teaches.';tag.parentNode.parentNode.appendChild(d)}
+ var heat=function(v){var t=Math.max(0,Math.min(1,(v-35)/55));var c=Math.round(235-t*95);return 'background:rgb('+c+','+(Math.round(240-t*40))+',255)'};
+ var rows=CLS.map(function(c){var cell=function(rs,p){var q=flt(rs,function(x){return x[C.cls]===c&&x[C.peak]===p});return util(q)};var v=[cell(S.before,1),cell(S.after,1),cell(S.before,0),cell(S.after,0)];return '<tr><td><b>'+c+'</b></td>'+v.map(function(x){return '<td style="'+heat(x)+'">'+pct(x)+'</td>'}).join('')+'<td>'+(v[3]-v[2]>=0?'+':'')+(v[3]-v[2]).toFixed(1)+' pts</td></tr>'}).join('');
+ document.getElementById('dpheat').innerHTML='<table class="t heat"><tr><th>Class</th><th>Peak, before</th><th>Peak, after</th><th>Off-peak, before</th><th>Off-peak, after</th><th>Off-peak change</th></tr>'+rows+'</table>';
+ mk('dp5',barCfg(lab,bb.map(function(q){return q.length?mean(q.map(function(r){return r[C.rating]})):null}),null,function(v){return v.toFixed(2)},{min:4,max:5}));
+ mk('dp6',barCfg(lab,bb.map(function(q){return sum(q,'att')?sum(q,'churn')/sum(q,'att')*100:0}),null,pct,{min:0}))}
+
+/* ================= MODAL (KPI pop-ups) ================= */
+function fig(id,cap,sub,note){return '<div class="fig"><div class="cap">'+cap+' <span>'+(sub||'')+'</span></div><div class="body">'+box(id)+'</div>'+(note?'<div class="note">'+note+'</div>':'')+'</div>'}
+var CH={
+ ch1:{nav:'Seat utilization',n:'Chapter 1',t:'Fuller classes, same schedule',draw:function(){mk('c1p',barCfg(['Peak hours','Off-peak hours'],[B.byPeak['1'].util,B.byPeak['0'].util],[A.byPeak['1'].util,A.byPeak['0'].util],pct,{min:0,max:100}));mk('c1o',barCfg(LL,LOCS.map(function(l){return B.byLocPeak[l]['0'].util}),LOCS.map(function(l){return A.byLocPeak[l]['0'].util}),pct,{min:0,max:100}));mk('c1a',barCfg(LL,arr(B,'util'),arr(A,'util'),pct,{min:0,max:100}));mk('c1b',lineCfg(MONTHS,marr(B,'util'),marr(A,'util'),pct,{min:40}))},
+  html:function(){return '<p class="lead"><b>Seat utilization rate</b> = attendance divided by class capacity. We split it into peak and off-peak hours to see which timings have room. Overall it rises from <b>'+pct(B.overall.util)+'</b> to <b>'+pct(A.overall.util)+'</b> with no new classes.</p>'+LEG+'<div class="figs">'+fig('c1p','Utilization: peak vs off-peak hours','% of seats filled','Peak classes are already close to full. Off-peak is where seats sit empty.')+fig('c1o','Off-peak utilization by location','% of seats filled','Location 3 has the most empty off-peak seats.')+fig('c1a','Utilization by location','% of seats filled',null)+fig('c1b','Utilization by month','% of seats filled','The January surge and fade pattern stays; the gap between lines is the platform effect.')+'</div>'+
+  '<div class="finding"><b>Peak is '+pct(B.byPeak['1'].util)+' full, off-peak only '+pct(B.byPeak['0'].util)+'.</b> After: peak '+pct(A.byPeak['1'].util)+', off-peak '+pct(A.byPeak['0'].util)+' (+'+(A.overall.util-B.overall.util).toFixed(1)+' points overall).<small>Insight: '+pct(F.offLoss,0)+' of off-peak sessions lost money before; '+pct(F.offLossA,0)+' do after. Offer off-peak slots to members who were turned away elsewhere.</small></div>'}},
+ ch2:{nav:'Cross-location access',n:'Chapter 2',t:'Fewer members turned away',draw:function(){mk('c2a',barCfg(LL,arr(B,'denied'),arr(A,'denied'),num));mk('c2b',lineCfg(MONTHS,marr(B,'denied'),marr(A,'denied'),num))},
+  html:function(){return '<p class="lead">Before, memberships were location-locked: <b>'+num(B.overall.denied)+'</b> requests were turned away while seats sat empty. With one shared membership, <b>'+num(A.crossBooked)+'</b> of them become bookings, limited by seats left.</p>'+LEG+'<div class="figs">'+fig('c2a','Requests turned away by location','count',null)+fig('c2b','Turned away by month','count',null)+'</div>'+
+  '<div class="finding"><b>Turned-away requests fall '+Math.round((1-A.overall.denied/B.overall.denied)*100)+'%</b> ('+num(B.overall.denied)+' to '+num(A.overall.denied)+').<small>Insight: '+pct(F.denEmpty,0)+' of refused requests were in rooms with at least a quarter of seats empty. Assumption: '+Math.round(D.assumptions.A_XLOC_CONVERT*100)+'% of turned-away requests would book if allowed, and only when a seat is free.</small></div>'}},
+ ch4:{nav:'Churn risk',n:'Chapter 3',t:'Churn risk comes down',draw:function(){mk('c4a',lineCfg(MONTHS,marr(B,'churn'),marr(A,'churn'),pct,{min:0}));mk('c4b',barCfg(LL,arr(B,'churn'),arr(A,'churn'),pct))},
+  html:function(){return '<p class="lead">The share of attendees showing churn-risk behavior falls from <b>'+pct(B.overall.churn)+'</b> to <b>'+pct(A.overall.churn)+'</b>. Fewer errors mean better experiences, and the churn engine lets staff reach out early.</p>'+LEG+'<div class="figs">'+fig('c4a','Churn-risk share by month','% of attendees','Risk climbs after the January surge in both cases, but starts and ends lower after.')+fig('c4b','Churn-risk share by location','% of attendees',null)+'</div>'+
+  '<div class="finding"><b>'+num(B.overall.churners-A.overall.churners)+' fewer churn-risk attendee visits</b> over six months.<small>Insight: the score uses visit gaps, falling visits, cancellations and low ratings, so staff can contact members before they cancel. Assumption: early outreach cuts churn-risk attendees by '+Math.round(D.assumptions.A_OUTREACH_CUT*100)+'%.</small></div>'}},
+ ch5:{nav:'Profitability',n:'Chapter 4',t:'Profit follows attendance',draw:function(){mk('c5a',barCfg(CLS,carr(B,'margin'),carr(A,'margin'),pct));mk('c5b',barCfg(['Revenue','Profit'],[B.overall.revenue,B.overall.profit],[A.overall.revenue,A.overall.profit],function(v){return '$'+Math.round(v/1000)+'k'}))},
+  html:function(){return '<p class="lead">Margin rises from <b>'+pct(B.overall.margin)+'</b> to <b>'+pct(A.overall.margin)+'</b>, even after paying for the platform. Revenue grows with attendance while fixed class costs stay the same.</p>'+LEG+'<div class="figs">'+fig('c5a','Profit margin by class type','% of revenue',null)+fig('c5b','Total revenue and profit','USD','Revenue and profit, six months, all locations.')+'</div>'+
+  '<div class="finding"><b>Profit: '+usd(B.overall.profit)+' to '+usd(A.overall.profit)+'</b> (+'+usd(A.overall.profit-B.overall.profit)+').<small>Insight: after-costs include '+usd(D.assumptions.PLATFORM_COST_TOTAL)+' for hosting, messaging and licences. Spin stays weak ('+pct(B.byClass.Spin.margin)+' to '+pct(A.byClass.Spin.margin)+'): fuller rooms cannot fix a small room with high cost.</small></div>'}},
+ ch6:{nav:'Member rating',n:'Chapter 5',t:'Ratings recover a little',draw:function(){mk('c6a',barCfg(LL,arr(B,'rating'),arr(A,'rating'),function(v){return v.toFixed(2)},{min:4,max:5}));mk('c6b',barCfg(CLS,carr(B,'rating'),carr(A,'rating'),function(v){return v.toFixed(2)},{min:4,max:5}))},
+  html:function(){return '<p class="lead">Average rating moves from <b>'+B.overall.rating.toFixed(2)+'</b> to <b>'+A.overall.rating.toFixed(2)+'</b>. The gain is small by design: only sessions where an error was prevented regain the rating penalty the baseline applied.</p>'+
+  '<div class="warn" style="margin:0 0 14px"><b>How the rating is measured:</b> one post-class rating per session on a 1 to 5 scale. Every figure is the average of those session ratings for the group shown. It is not a per-member score.</div>'+LEG+'<div class="figs">'+fig('c6a','Average rating by location','axis starts at 4.0','The axis is zoomed to 4.0 to 5.0 so small differences are visible.')+fig('c6b','Average rating by class type','axis starts at 4.0',null)+'</div>'+
+  '<div class="finding"><b>+'+(A.overall.rating-B.overall.rating).toFixed(2)+' rating points</b>, largest where errors were most common.<small>Insight: a session with a record error is rated '+F.rE.toFixed(2)+' against '+F.rN.toFixed(2)+' without one. A real rollout may do better or worse; this is the conservative modeled effect.</small></div>'}}};
+var ORDER=['ch1','ch2','ch4','ch5','ch6'],cur=null,openGen=0,closeT=null;
+function openView(id,card){var i=ORDER.indexOf(id);if(i<0)return;cur=id;var v=CH[id],m=document.getElementById('modal'),bg=document.getElementById('mbg');
+ if(card){var r=card.getBoundingClientRect();m.style.setProperty('--ox',Math.round((r.left+r.width/2)/window.innerWidth*100)+'%');m.style.setProperty('--oy',Math.round((r.top+r.height/2)/window.innerHeight*100)+'%')}
+ var already=bg.classList.contains('on')&&!m.classList.contains('out');if(!already){m.className='modal';void m.offsetWidth}
+ var pv=ORDER[i-1],nx=ORDER[i+1];
+ m.innerHTML='<div class="mh"><span class="st">'+(i+1)+' of '+ORDER.length+' &middot; '+v.nav+'</span><span class="sp"></span><button class="x" data-close="1" aria-label="Close">&times;</button></div><div class="mb"><div class="crumb">'+v.n+'</div><h2>'+v.t+'</h2>'+v.html()+'</div>'+
+  '<div class="mf">'+(pv?'<button class="btn sec" data-open="'+pv+'">&larr; '+CH[pv].nav+'</button>':'<span></span>')+(nx?'<button class="btn" data-open="'+nx+'">'+CH[nx].nav+' &rarr;</button>':'<button class="btn" data-close="1">Back to overview</button>')+'</div>';
+ bg.classList.add('on');document.body.classList.add('lock');m.scrollTop=0;clearTimeout(closeT);var gen=++openGen;
+ setTimeout(function(){if(gen!==openGen||cur!==id)return;v.draw()},already?60:520)}
+function closeView(){var bg=document.getElementById('mbg'),m=document.getElementById('modal');if(!bg.classList.contains('on'))return;m.classList.add('out');openGen++;
+ closeT=setTimeout(function(){bg.classList.remove('on');document.body.classList.remove('lock');m.className='modal';m.innerHTML='';Object.keys(charts).forEach(function(k){if(/^c\d/.test(k)){charts[k].destroy();delete charts[k]}});cur=null},190)}
+
+/* ================= TABS ================= */
+var TABS=[['overview','Overview',pOverview,dOverview],['analysis','Analysis',pAnalysis,dAnalysis],['ba','Before vs After',pBA,dBA],['explorer','Data Explorer',pExplorer,function(){dExplorer()}],['deep','Utilization Deep Dive',pDeep,dDeep]];
+var built={};
+function showTab(id){var t=TABS.filter(function(x){return x[0]===id})[0]||TABS[0];id=t[0];
+ TABS.forEach(function(x){document.getElementById('p-'+x[0]).classList.toggle('on',x[0]===id)});
+ Array.prototype.forEach.call(document.querySelectorAll('#tabs button'),function(b){b.classList.toggle('on',b.getAttribute('data-tab')===id)});
+ if(!built[id]){document.getElementById('p-'+id).innerHTML=t[2]();built[id]=1;if(id==='explorer')bindExplorer()}
+ try{t[3]()}catch(x){var pg=document.getElementById('p-'+id),n=document.createElement('div');n.className='warn';n.textContent='A chart could not be drawn: '+x.message+'. Please refresh with Ctrl+Shift+R.';pg.insertBefore(n,pg.firstChild);if(window.console)console.error(x)}
+ curTab=id;if(location.hash!=='#'+id)history.replaceState(null,'','#'+id);window.scrollTo(0,0)}
+function init(){
+ var nav=document.getElementById('tabs');TABS.forEach(function(t){var b=document.createElement('button');b.setAttribute('data-tab',t[0]);b.textContent=t[1];nav.appendChild(b)});
+ document.addEventListener('click',function(e){
+  if(e.target.closest('[data-close]')||e.target.id==='mbg'){closeView();return}
+  var o=e.target.closest('[data-open]');if(o){openView(o.getAttribute('data-open'),o.classList.contains('kc')?o:null);return}
+  var t=e.target.closest('[data-tab],[data-tabgo]');if(t){showTab(t.getAttribute('data-tab')||t.getAttribute('data-tabgo'));return}
+  var f=e.target.closest('[data-tab]')});
+ document.addEventListener('click',function(e){var f=e.target.closest('.fl');if(f)showTab(f.getAttribute('data-tab'))});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeView();if(cur&&(e.key==='ArrowRight'||e.key==='ArrowLeft')){var j=ORDER.indexOf(cur)+(e.key==='ArrowRight'?1:-1);if(j>=0&&j<ORDER.length)openView(ORDER[j])}});
+ var rz=null;window.addEventListener('resize',function(){clearTimeout(rz);rz=setTimeout(function(){var t=TABS.filter(function(x){return x[0]===curTab})[0];if(t&&t[0]!=='explorer')try{t[3]()}catch(x){}if(cur&&CH[cur])try{CH[cur].draw()}catch(x){}},250)});
+ window.addEventListener('hashchange',function(){showTab(location.hash.slice(1))});
+ if(typeof Chart==='undefined')document.getElementById('nochart').style.display='block';
+ showTab(location.hash.slice(1)||'overview')}
+init();
+})();
+</script>
+</body>
+</html>
